@@ -1,12 +1,11 @@
 function List() {
   return (
-    <list>
-      Mitt projekt
-      Mitt projekt
-      Mitt projekt
-      Mitt projekt
-      Mitt projekt
-    </list>
+    <ul class="list-group">
+      <li class="list-group-item">My Project</li>
+      <li class="list-group-item">My Project</li>
+      <li class="list-group-item">My Project</li>
+      <li class="list-group-item">My Project</li>
+    </ul>
   );
 }
 

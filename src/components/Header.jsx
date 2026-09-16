@@ -1,7 +1,10 @@
+import './HeaderStyle.css'
+import minordleSymbol from "./MinordleSymbol.png";
+
 function Header() {
   return (
-    <header>
-      <h1>Mitt projekt</h1>
+    <header className="header">
+      <img src={minordleSymbol} alt="MinordleSymbol" className='minordleSymbol' />
     </header>
   );
 }

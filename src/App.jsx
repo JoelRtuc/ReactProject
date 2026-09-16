@@ -1,15 +1,18 @@
 import Header from "./components/Header";
-import Footer from "./components/Footer";
+import SideBar from "./components/SideBar";
 import { useEffect, useState } from "react";
 import { getAllLanguages, getLanguage, baseUrl } from "./components/api";
+import Map from "./components/MainMap";
+import './App.css';
 
 function App() {
   return (
     <>
+    <div className="mapDivider">
       <Header />
-      <Footer />
-      <LanguageList />
+      <SideBar />
       <SpecificLanguage id={1} />
+    </div>
     </>
 
   );
@@ -30,7 +33,8 @@ function SpecificLanguage({id}) {
 
       return (
         <div>
-          {language.languageName} {language.languageFamily}
+          {language.languageName} specific language {language.languageFamily}
+          <Map yellowUrl={`${baseUrl}${language.yellowImg}`} />
         </div>
       );
 }

@@ -1,8 +1,11 @@
 
 .sidebar{
-
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
     position:fixed;
-    margin-left: 80%;
+    margin-left: 78%;
     top: 0;
     width: 20%;
     height: 98%;
@@ -10,4 +13,17 @@
     border-width: 5px;
     border-color: rgb(58, 45, 45);
     background-color: #e8dcb8;
+    z-index: 10;
+}
+
+p{
+    text-align: center;
+    font-size: small;
+    color: black;
+    margin: 25 auto;
+}
+
+button{
+    width: 100px;
+    height: 25px;
 }

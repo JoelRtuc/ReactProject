@@ -1,5 +1,9 @@
 .header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position:fixed;
+    z-index: 5;
     top: 0;
     width: 98%;
     height: 20%;
@@ -10,9 +14,6 @@
 }
 
 .minordleSymbol{
- display: flex;
- margin: 35%;
- margin-top: -20px;
  width: 250px;
  height: 200px;
 }

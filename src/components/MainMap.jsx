@@ -5,7 +5,7 @@ import './MainMapStyle.css';
 
 const PIN_DISPLAY_RADIUS = 20;
 
-export default function Map({ yellowUrl, greenUrl, guessed, onScore }) {
+export default function Map({ yellowUrl, greenUrl, guessed, onScore, score }) {
   const [markerPos, setMarkerPos] = useState(null);
   const [overlaysLoaded, setOverlaysLoaded] = useState({ green: false, yellow: false });
   const greenImgRef = useRef(null);
@@ -27,7 +27,7 @@ export default function Map({ yellowUrl, greenUrl, guessed, onScore }) {
   }
 
   function hasOpaquePixelNear(imgEl, pos, rect) {
-    if (!imgEl || !imgEl.complete || imgEl.naturalWidth === 0) return false;
+    if (!imgEl || !imgEl.complete || imgEl.naturalWidth == 0) return false;
 
     try {
       const canvas = document.createElement("canvas");
@@ -75,9 +75,10 @@ export default function Map({ yellowUrl, greenUrl, guessed, onScore }) {
 
     hasScoredRef.current = true;
 
-    if (hitGreen) onScore(200);
-    else if (hitYellow) onScore(100);
-    else onScore(0);
+    console.log(score);
+
+    if (hitGreen) onScore(score + 200);
+    else if (hitYellow) onScore(score + 100);
   }, [guessed, markerPos, overlaysLoaded, onScore]);
 
   useEffect(() => {

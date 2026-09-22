@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { getAllUsers, registerUser, uploadProfilePicture } from './api';
+import { getAllUsers, registerUser, uploadProfilePicture, updateUser } from './api';
 import './RulesWindowStyle.css';
 
-export default function Window({ roundOver, onLogin }) {
+export default function Window({ roundOver, onLogin, user, points, onUserUpdate }) {
   const [hide, hideSet] = useState(false);
   const [users, setUsers] = useState([]);
   const [username, setUsername] = useState("");
@@ -17,6 +17,25 @@ export default function Window({ roundOver, onLogin }) {
       .then((data) => setUsers(data))
       .catch((err) => setError(err.message));
   }, []);
+
+  useEffect(() => {
+  if (roundOver && user) {
+    const updatedResults = [...user.gameResults, points];
+    const newHighScore = points > user.highScore ? points : user.highScore;
+
+    const updatedUser = {
+      ...user,
+      gameResults: updatedResults,
+      highScore: newHighScore,
+    };
+
+    onUserUpdate(updatedUser);
+
+    updateUser(user.id, updatedUser).catch((err) =>
+      console.error("Failed to save round result:", err)
+    );
+  }
+}, [roundOver]);
 
   function handleLogin() {
     const match = users.find(
@@ -57,12 +76,18 @@ export default function Window({ roundOver, onLogin }) {
     return null;
   }
 
-  if (roundOver) {
-    return <div className="rules">round is over!</div>;
-  }
+if (roundOver) {
+  return (
+    <div className="rules">
+      <p>round is over!</p>
+      <p>Score: {points}</p>
+      {user && <p>High score: {Math.max(points, user.highScore)}</p>}
+    </div>
+  );
+}
 
   function handleDragOver(e) {
-    e.preventDefault(); // required to allow dropping at all
+    e.preventDefault();
     setIsDragging(true);
   }
 

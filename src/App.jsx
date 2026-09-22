@@ -48,13 +48,17 @@ function App() {
     setCurrentUser(user);
   }
 
+  function handleUserUpdate(updatedUser) {
+  setCurrentUser(updatedUser);
+}
+
   if (error) return <p>{error}</p>;
 
   if (randomId == null) return <p>Loading...</p>;
 
   return (
     <div className="mapDivider">
-        <Window roundOver={roundsOver} onLogin={handleLogin} />
+        <Window roundOver={roundsOver} onLogin={handleLogin} user={currentUser} points={points}   onUserUpdate={handleUserUpdate} />
         <SideBar id={randomId} guessed={guessed} setGuessed={setGuessed} setNextRound={nextRound} setScore={setPoints} points={points} roundCount={roundCount} setRoundCount={roundCountSet} roundOver={roundsOver} />
         <MapLanguage id={randomId} bool={guessed} onTheScore={setPoints} scoreMap={points} roundOver={roundsOver} />
         <Header user={currentUser} />
@@ -84,27 +88,6 @@ function MapLanguage({id, bool, onTheScore, scoreMap}) {
            score={scoreMap} />
         </div>
       );
-}
-
-function randomLanguage(){
-    const [languages, setLanguages] = useState([]);
-    const [error, setError] = useState();
-
-      useEffect(() => {
-      getAllLanguages()
-      .then((data) => setLanguages(data))
-      .catch((err) => setError(err.message));
-  }, []);
-
-  if (error) return <p>{error}</p>;
-
-  if(languages && languages.length){
-    return (Math.floor(Math.random() * languages.length) + 1);
-  }
-  else{
-    return 1;
-  }
-
 }
 
 export default App

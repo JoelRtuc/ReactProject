@@ -28,7 +28,7 @@ button{
     height: 25px;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 750px) {
     .sidebar{
         flex-direction: row;
         flex-wrap: nowrap;

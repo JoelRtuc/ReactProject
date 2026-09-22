@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getAllUsers, registerUser, uploadProfilePicture, updateUser } from './api';
+import { baseUrl } from './api';
 import './RulesWindowStyle.css';
 
 export default function Window({ roundOver, onLogin, user, points, onUserUpdate }) {
@@ -135,19 +136,25 @@ if (roundOver) {
 
   return (
     <div className="rules">
-      {view === "userList" ? (
-        <>
+{view === "userList" ? (
+  <>
           <p>All users</p>
-          <ul>
-            {users.map((u) => (
-              <li key={u.id}>{u.username}</li>
-            ))}
-          </ul>
-          <button type="button" onClick={() => setView("login")}>
-            Back
-          </button>
-        </>
-      ) : (
+            <ul className="userList">
+              {users.map((u) => (
+                <li key={u.id} className="userListItem">
+                  <img
+                    src={`${baseUrl}${u.profilePicturePath}`}
+                    className="userAvatar"
+                  />
+                  {u.username}
+                </li>
+              ))}
+            </ul>
+            <button type="button" onClick={() => setView("login")}>
+              Back
+            </button>
+          </>
+        ) : (
         <>
           <p>rules:</p>
           <p>

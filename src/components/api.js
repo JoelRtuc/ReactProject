@@ -38,6 +38,19 @@ export async function registerUser(user) {
   return res.json();
 }
 
+export async function uploadProfilePicture(userId, file) {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const res = await fetch(`${userUrl}/${userId}/profile-picture`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!res.ok) throw new Error("Failed to upload profile picture");
+  return res.json();
+}
+
 export async function updateUser(id, user) {
   const res = await fetch(`${baseUrl}/api/Users/${id}`, {
     method: "PUT",

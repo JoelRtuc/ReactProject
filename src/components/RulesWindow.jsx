@@ -1,6 +1,6 @@
-import './RulesWindowStyle.css';
 import { useState, useEffect } from 'react';
-import { getAllUsers, registerUser } from './api';
+import { getAllUsers, registerUser, uploadProfilePicture } from './api';
+import './RulesWindowStyle.css';
 
 export default function Window({ roundOver, onLogin }) {
   const [hide, hideSet] = useState(false);
@@ -9,6 +9,8 @@ export default function Window({ roundOver, onLogin }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [view, setView] = useState("login"); // "login" | "register" | "userList"
+  const [isDragging, setIsDragging] = useState(false);
+  const [pendingFile, setPendingFile] = useState(null);
 
   useEffect(() => {
     getAllUsers()
@@ -59,6 +61,53 @@ export default function Window({ roundOver, onLogin }) {
     return <div className="rules">round is over!</div>;
   }
 
+  function handleDragOver(e) {
+    e.preventDefault(); // required to allow dropping at all
+    setIsDragging(true);
+  }
+
+  function handleDragLeave() {
+    setIsDragging(false);
+  }
+
+  function handleDrop(e) {
+    e.preventDefault();
+    setIsDragging(false);
+
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith("image/")) {
+      setPendingFile(file);
+    } else {
+      setError("Please drop an image file.");
+    }
+  }
+
+  async function handleRegister() {
+    if (!username || !password) {
+      setError("Enter a username and password");
+      return;
+    }
+    if (users.some((u) => u.username === username)) {
+      setError("Username already taken");
+      return;
+    }
+
+    try {
+      const newUser = await registerUser({ username, password });
+
+      if (pendingFile) {
+        await uploadProfilePicture(newUser.id, pendingFile);
+      }
+
+      setUsers((prev) => [...prev, newUser]);
+      setError(null);
+      onLogin(newUser);
+      hideSet(true);
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
   return (
     <div className="rules">
       {view === "userList" ? (
@@ -104,7 +153,25 @@ export default function Window({ roundOver, onLogin }) {
           {error && <p style={{ color: "red" }}>{error}</p>}
 
           {view === "register" ? (
+            
             <>
+                <div
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  style={{
+                    border: isDragging ? "3px dashed green" : "2px dashed gray",
+                    padding: "20px",
+                    textAlign: "center",
+                    margin: "10px 0",
+                  }}
+                >
+                  {pendingFile ? (
+                    <p>Selected: {pendingFile.name}</p>
+                  ) : (
+                    <p>Drag and drop a profile picture here</p>
+                  )}
+                </div>
               <button type="button" onClick={handleRegister}>Register</button>
               <button type="button" onClick={() => { setView("login"); setError(null); }}>
                 Back to login
